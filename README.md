@@ -1,0 +1,2 @@
+Mysqldumpをcronで実行して
+S3に転送

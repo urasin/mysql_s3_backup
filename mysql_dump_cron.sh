@@ -3,6 +3,10 @@
 # BASE_DIR
 BASE_DIR=$(cd $(dirname $0); pwd)
 
+# project 変数
+PROJECT_NAME=""
+SERVER_ENV=""  # "production" or "staging"
+
 # S3変数一覧
 S3_BUCKET_NAME=""
 export AWS_ACCESS_KEY_ID=""
@@ -26,9 +30,10 @@ MINUTE=`date '+%M'`
 SECOND=`date '+%S'`
 
 FOLDER_NAME=mysql_dump_cron/${YEAR}-${MONTH}
-DUMP_FILE_NAME=goocus3_staging_${YEAR}-${MONTH}${DAY}-${HOUR}${MINUTE}${SECOND}.dump
+DUMP_FILE_NAME=${PROJECT_NAME}_${SERVER_ENV}_${YEAR}-${MONTH}${DAY}-${HOUR}${MINUTE}${SECOND}.dump
+
 mkdir -p ${FOLDER_NAME}
 
 mysqldump -u${DB_USER} -p${DB_PASS} -h${DB_HOST} ${DB_NAME} > ~/${FOLDER_NAME}/${DUMP_FILE_NAME}
 
-s3cmd put -rr ${FOLDER_NAME}/${DUMP_FILE_NAME} s3://${S3_BUCKET_NAME}/staging/${FOLDER_NAME}/${DUMP_FILE_NAME}
+s3cmd put -rr ${FOLDER_NAME}/${DUMP_FILE_NAME} s3://${S3_BUCKET_NAME}/${SERVER_ENV}/${FOLDER_NAME}/${DUMP_FILE_NAME}
