@@ -1,0 +1,3 @@
+MAILTO=""
+# * * * * * ~/mysql_dump_cron.sh  # 1分毎 debug用
+5 */1 * * * ~/mysql_dump_cron.sh  # 毎時5分毎に実行
